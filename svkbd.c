@@ -35,7 +35,7 @@
 #define STRINGTOKEYSYM(X)			(XStringToKeySym(X))
 
 /* enums */
-enum { SchemeNorm, SchemePress, SchemeHighlight, SchemeLast };
+enum { SchemeNorm, SchemePress, SchemeHighlight, SchemeBorder, SchemeLast };
 enum { NetWMWindowType, NetLast };
 
 /* typedefs */
@@ -266,17 +266,21 @@ drawkeyboard(void) {
 
 void
 drawkey(Key *k) {
-	int x, y, w, h;
+	int x, y, w, h, s;
 	const char *l;
 
 	if(k->pressed)
-		drw_setscheme(drw, scheme[SchemePress]);
+		s = SchemePress;
 	else if(k->highlighted)
-		drw_setscheme(drw, scheme[SchemeHighlight]);
+		s = SchemeHighlight;
 	else
-		drw_setscheme(drw, scheme[SchemeNorm]);
+		s = SchemeNorm;
+
+	drw_setscheme(drw, scheme[s]);
 	drw_rect(drw, k->x, k->y, k->w, k->h, 1, 1);
+	drw_setscheme(drw, scheme[SchemeBorder]);
 	drw_rect(drw, k->x, k->y, k->w, k->h, 0, 0);
+	drw_setscheme(drw, scheme[s]);
 
 	if (k->keysym == XK_KP_Insert) {
 		if (enableoverlays) {
@@ -660,7 +664,7 @@ setup(void) {
 		keys[i].pressed = 0;
 
 	wa.override_redirect = !wmborder;
-	wa.border_pixel = scheme[SchemeNorm][ColFg].pixel;
+	wa.border_pixel = scheme[SchemeBorder][ColFg].pixel;
 	wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
 	win = XCreateWindow(dpy, root, wx, wy, ww, wh, 0,
 			CopyFromParent, CopyFromParent, CopyFromParent,

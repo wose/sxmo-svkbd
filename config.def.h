@@ -10,5 +10,6 @@ static const char *colors[SchemeLast][2] = {
 	[SchemeNorm] = { "#eaeaea", "#161616" },
 	[SchemePress] = { "#eaeaea", "#666666" },
 	[SchemeHighlight] = { "#161616", "#e6c547" },
+	[SchemeBorder] = { "#70c0ba", "#70c0ba" },
 };
 
